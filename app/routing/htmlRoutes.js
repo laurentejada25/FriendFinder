@@ -9,7 +9,7 @@ module.exports = function(app){
 	//HTML GET requests
 
 	//Route that leads to home page
-	app.get("/home", function(req, res){
+	app.get("/", function(req, res){
 		res.sendFile(path.join(__dirname, "../public/home.html"));
 	});
 

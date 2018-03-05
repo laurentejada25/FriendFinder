@@ -165,19 +165,57 @@
     </footer>
   </div>
 
+  <!-- Modal -->
+ <div id="resultsModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">X</button>
+          <h2 class="modal-title"><strong>Best Match</strong></h2>
+        </div>
+        <div class="modal-body">
+          <h2 id="matchName"></h2>
+          <img id="matchImg" alt="">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </body>
 </html>
 
 <script type="text/javascript">
-	// jQuery.ajaxSettings.traditional = true;
+	//url for current page if it changes  
 	var currentURL = window.location.origin;
-
+	
+	//submit on click event
 	$("#submit").on("click", function(event){
 		event.preventDefault();
 
-		var newFriend = {
-			Name: $("#Name").val().trim(),
-			Photo: $("#Photo").val().trim(),
+	//validate forms
+	function formValidation(){
+		var validForm = true;
+		$(".form-control").each(function(){
+			if($(this).val().trim() === ""){
+				validForm = false;
+			}
+		});
+		$(".chosen-select").each(function(){
+			if($(this).val().trim() === ""){
+				validForm = false;
+			}
+		});
+		return validForm;
+	}	
+	//function to validate required forms
+	if(formValidation()){
+			var newFriend = {
+			name: $("#Name").val().trim(),
+			photo: $("#Photo").val().trim(),
 			scores: [
 			$("#Q1").val().trim(),
 			$("#Q2").val().trim(),
@@ -191,7 +229,26 @@
 			$("#Q10").val().trim(),
 		]};
 
-		console.log("newFriend = " + JSON.parse(newFriend));
+	console.log("newFriend = " + newFriend);
+
+	//ajax post data to friends api
+	$.post("/api/friends", newFriend, function(data){
+		console.log(newFriend);
+		$("#matchName").text(data.name);
+		$("#matchImg").attr("src", data.photo);
+
+		//show best match
+		$("#resultsModal").modal("toggle");
+
+		$("#Name").val("");
+		$("#Photo").val("");
+		});
+
+		} else {
+			alert("Please fill out required portions before you can submit.");
+		}
+		return false;
 	});	
+// };
 
 </script>
