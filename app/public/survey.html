@@ -192,10 +192,6 @@
 	//url for current page if it changes  
 	var currentURL = window.location.origin;
 	
-	//submit on click event
-	$("#submit").on("click", function(event){
-		event.preventDefault();
-
 	//validate forms
 	function formValidation(){
 		var validForm = true;
@@ -211,6 +207,11 @@
 		});
 		return validForm;
 	}	
+
+	//submit on click event
+	$("#submit").on("click", function(event){
+		event.preventDefault();
+
 	//function to validate required forms
 	if(formValidation()){
 			var newFriend = {
@@ -233,7 +234,7 @@
 
 	//ajax post data to friends api
 	$.post("/api/friends", newFriend, function(data){
-		console.log(newFriend);
+		console.log(data);
 		$("#matchName").text(data.name);
 		$("#matchImg").attr("src", data.photo);
 
